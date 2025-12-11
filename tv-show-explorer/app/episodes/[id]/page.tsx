@@ -1,5 +1,4 @@
 "use client";
-
 import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
@@ -62,12 +61,12 @@ export default function EpisodeDetailPage() {
                 </span>
               </p>
               <p className="mb-2">
-                <span className="font-semibold">Air Date:</span>{" "}
+                <span className="font-semibold">Air Date:</span>
                 {episode.airdate}
               </p>
               {episode.runtime && (
                 <p>
-                  <span className="font-semibold">Runtime:</span>{" "}
+                  <span className="font-semibold">Runtime:</span>
                   {episode.runtime} minutes
                 </p>
               )}
