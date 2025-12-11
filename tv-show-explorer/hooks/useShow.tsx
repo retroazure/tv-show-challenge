@@ -1,7 +1,7 @@
 import { IEpisode, IShowDetails } from "@/domain/types/TvShow";
 import { useQuery } from "@tanstack/react-query";
 
-export function useShow(showId: number) {
+export function useShow(showId: number = 1) {
   return useQuery({
     queryKey: ["show", showId],
     queryFn: async (): Promise<IShowDetails | null> => {
@@ -18,14 +18,27 @@ export function useShow(showId: number) {
         ? await episodesResponse.json()
         : [];
 
+      console.log(episodesData);
+
       return {
         title: showData.name,
         description: showData.summary || "",
         coverImage: showData.image?.medium || "",
         episodes: episodesData.map((ep: IEpisode) => ({
           id: ep.id,
-          title: ep.title,
+          name: ep.name,
           url: ep.url,
+          image: ep.image
+            ? {
+                medium: ep.image.medium,
+                original: ep.image.original,
+              }
+            : undefined,
+          season: ep.season,
+          number: ep.number,
+          airdate: ep.airdate,
+          summary: ep.summary || "",
+          runtime: ep.runtime,
         })),
       };
     },

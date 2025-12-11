@@ -1,7 +1,16 @@
 export interface IEpisode {
   id: number;
-  title: string;
+  name: string;
   url: string;
+  image?: {
+    medium: string;
+    original: string;
+  };
+  season: number;
+  number: number;
+  airdate: string;
+  summary?: string;
+  runtime: number;
 }
 
 export interface IShowDetails {
