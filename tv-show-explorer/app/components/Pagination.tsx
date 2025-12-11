@@ -14,16 +14,25 @@ export default function Pagination({ totalPages }: { totalPages: number }) {
     return `${pathname}?${params.toString()}`;
   };
 
-  const allPages = Array.from({ length: totalPages }, (_, i) => i + 1);
+  // ✅ Sliding window of 5 pages
+  const windowSize = 5;
+  const windowStart =
+    Math.floor((currentPage - 1) / windowSize) * windowSize + 1;
+  const windowEnd = Math.min(windowStart + windowSize - 1, totalPages);
+
+  const visiblePages = Array.from(
+    { length: windowEnd - windowStart + 1 },
+    (_, i) => windowStart + i
+  );
 
   return (
     <nav
-      className="flex items-center justify-center gap-4"
+      className="flex flex-wrap items-center justify-center gap-2 sm:gap-4"
       aria-label="Pagination"
     >
       <Link
         href={createPageURL(currentPage - 1)}
-        className={`px-4 py-2 rounded-lg flex items-center gap-2 ${
+        className={`px-3 py-2 rounded-lg flex items-center gap-2 ${
           currentPage <= 1
             ? "opacity-50 cursor-not-allowed bg-gray-100"
             : "border border-gray-300 hover:bg-gray-100"
@@ -31,11 +40,11 @@ export default function Pagination({ totalPages }: { totalPages: number }) {
         aria-disabled={currentPage <= 1}
       >
         <ChevronLeft size={18} />
-        Previous
+        <span className="hidden sm:inline">Previous</span>
       </Link>
 
-      <div className="flex gap-2">
-        {allPages.map((page) => (
+      <div className="flex gap-1 sm:gap-2 justify-center">
+        {visiblePages.map((page) => (
           <Link
             key={page}
             href={createPageURL(page)}
@@ -53,14 +62,14 @@ export default function Pagination({ totalPages }: { totalPages: number }) {
 
       <Link
         href={createPageURL(currentPage + 1)}
-        className={`px-4 py-2 rounded-lg flex items-center gap-2 ${
+        className={`px-3 py-2 rounded-lg flex items-center gap-2 ${
           currentPage >= totalPages
             ? "opacity-50 cursor-not-allowed bg-gray-100"
             : "border border-gray-300 hover:bg-gray-100"
         }`}
         aria-disabled={currentPage >= totalPages}
       >
-        Next
+        <span className="hidden sm:inline">Next</span>
         <ChevronRight size={18} />
       </Link>
     </nav>
