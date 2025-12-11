@@ -18,8 +18,6 @@ export function useShow(showId: number = 1) {
         ? await episodesResponse.json()
         : [];
 
-      console.log(episodesData);
-
       return {
         title: showData.name,
         description: showData.summary || "",
