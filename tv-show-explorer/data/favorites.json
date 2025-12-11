@@ -1,0 +1,30 @@
+[
+  {
+    "id": 657308,
+    "name": "Escape from Monster Island",
+    "season": 1,
+    "number": 1,
+    "summary": "<p>Bubbles wins two tickets to a concert and has to pick between Blossom and Buttercup to go with her. Meanwhile, the Mayor's plane goes down over Monster Island and it's up to the girls to rescue him.</p>",
+    "airdate": "2016-04-04",
+    "runtime": 11,
+    "image": {
+      "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/53/132617.jpg",
+      "original": "https://static.tvmaze.com/uploads/images/original_untouched/53/132617.jpg"
+    },
+    "url": "https://www.tvmaze.com/episodes/657308/the-powerpuff-girls-1x01-escape-from-monster-island"
+  },
+  {
+    "id": 657309,
+    "name": "Princess Buttercup",
+    "season": 1,
+    "number": 2,
+    "summary": "<p>Buttercup becomes enamored with a team of roller derby girls called the Derbytantes. When she starts spending all of her time with them, Princess Morbucks seeks to be her replacement in the Powerpuff Girls.</p>",
+    "airdate": "2016-04-04",
+    "runtime": 15,
+    "image": {
+      "medium": "https://static.tvmaze.com/uploads/images/medium_landscape/53/132618.jpg",
+      "original": "https://static.tvmaze.com/uploads/images/original_untouched/53/132618.jpg"
+    },
+    "url": "https://www.tvmaze.com/episodes/657309/the-powerpuff-girls-1x02-princess-buttercup"
+  }
+]
