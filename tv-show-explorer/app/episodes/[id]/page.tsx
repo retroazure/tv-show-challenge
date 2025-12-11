@@ -1,45 +1,25 @@
-"use client";
-
-import { useParams } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { isFavoritedEpisode } from "@/app/server/actions";
 import FavoriteButton from "@/app/components/FavoriteButton";
-import { useEffect, useState } from "react";
+import { fetchEpisode } from "@/app/lib/fetch-episode";
 
-export default function EpisodeDetailPage() {
-  const params = useParams();
-  const episodeId = params.id;
-  const [isFavorited, setIsFavorited] = useState(false);
+interface EpisodeDetailPageProps {
+  params: Promise<{ id: string }>;
+}
 
-  const {
-    data: episode,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["episode", episodeId],
-    queryFn: async () => {
-      const response = await fetch(
-        `https://api.tvmaze.com/episodes/${episodeId}`
-      );
-      if (!response.ok) throw new Error("Failed to fetch episode");
-      return await response.json();
-    },
-  });
+export default async function EpisodeDetailPage({
+  params,
+}: EpisodeDetailPageProps) {
+  const { id } = await params;
+  const episodeId = Number(id);
 
-  useEffect(() => {
-    const checkFavorite = async () => {
-      const favorited = await isFavoritedEpisode(Number(episodeId));
-      setIsFavorited(favorited);
-    };
-    checkFavorite();
-  }, [episodeId]);
+  const [episode, isFavorited] = await Promise.all([
+    fetchEpisode(episodeId),
+    isFavoritedEpisode(episodeId),
+  ]);
 
-  if (isLoading) return <div className="p-6">Loading...</div>;
-  if (error)
-    return <div className="p-6 text-red-600">Error loading episode</div>;
   if (!episode) return <div className="p-6">Episode not found</div>;
 
   return (
@@ -68,17 +48,7 @@ export default function EpisodeDetailPage() {
             <div className="flex items-start justify-between gap-4 mb-4">
               <h1 className="text-4xl font-bold">{episode.name}</h1>
               <FavoriteButton
-                episode={{
-                  id: episode.id,
-                  name: episode.name,
-                  season: episode.season,
-                  number: episode.number,
-                  summary: episode.summary,
-                  airdate: episode.airdate,
-                  runtime: episode.runtime,
-                  image: episode.image,
-                  url: episode.url,
-                }}
+                episode={episode}
                 initialIsFavorited={isFavorited}
               />
             </div>

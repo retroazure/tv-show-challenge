@@ -59,25 +59,6 @@
 - Next.js Dev Server (port 3000)
 - Hot Module Replacement (HMR)
 
-## Project Structure
-```
-tv-show-explorer/
-├── app/
-│   ├── page.tsx (Home - Show + Episodes)
-│   ├── episodes/
-│   │   └── [id]/
-│   │       └── page.tsx (Episode Details)
-│   ├── layout.tsx
-│   └── globals.css
-├── hooks/
-│   └── useShow.ts (Custom React Query hook)
-├── domain/types/
-│   └── TvShow.ts (TypeScript interfaces)
-├── next.config.ts
-├── tailwind.config.ts
-└── tsconfig.json
-```
-
 ## Architectural Decisions
 
 ### Git Strategy
@@ -88,15 +69,7 @@ tv-show-explorer/
 ### Server Actions
 - Used only when required for server-based operations
 - Examples: POST requests, database mutations
-- Currently not in use (API is read-only)
-- Will be implemented when data persistence is needed
-
-### Data Fetching Strategy
-- TanStack React Query for all data fetching
-- Powerful caching & optimization capabilities
-- Automatic request deduplication
-- Stale-while-revalidate pattern support
-- Public API consumption (TVMaze)
+- Used for FavoriteButton functionality. Handling the state of the favorite button and preserving the object in a database (json file)
 
 ### Next.js Ecosystem Integration
 - **Next.js Image Component**: Optimized image loading, lazy loading, responsive sizes
@@ -111,3 +84,12 @@ tv-show-explorer/
 - Better performance out-of-the-box
 - Leveraging platform-specific advantages
 - Simpler codebase & maintainability
+
+## Data Fetching Strategy
+
+Data is fetched client-side using Tanstack Query. When the home page loads, it fetches the show and episodes from TVMaze. Tanstack Query caches this data automatically, so navigating away and returning uses the cache instead of fetching again. Since I added hooks for searching episodes, I kept this design with the Home page with the longest loading, but then I created a fetching episode function on the server, so that it leverages next js server sided rendering capabilities. Since it's only one episode, and its information, there's no need for fetching it on the client, it will be faster or be perceived that way by the user.
+
+### Why Not Static Generation?
+
+Static generation pre-builds pages ahead of time. But data changes constantly - new episodes air regularly, show information updates. The site would need constant rebuilds, which doesn't make sense for a public API that's not controlled.
+
