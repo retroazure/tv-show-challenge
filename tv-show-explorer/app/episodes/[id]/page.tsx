@@ -1,13 +1,18 @@
 "use client";
+
 import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { isFavoritedEpisode } from "@/app/server/actions";
+import FavoriteButton from "@/app/components/FavoriteButton";
+import { useEffect, useState } from "react";
 
 export default function EpisodeDetailPage() {
   const params = useParams();
   const episodeId = params.id;
+  const [isFavorited, setIsFavorited] = useState(false);
 
   const {
     data: episode,
@@ -23,6 +28,14 @@ export default function EpisodeDetailPage() {
       return await response.json();
     },
   });
+
+  useEffect(() => {
+    const checkFavorite = async () => {
+      const favorited = await isFavoritedEpisode(Number(episodeId));
+      setIsFavorited(favorited);
+    };
+    checkFavorite();
+  }, [episodeId]);
 
   if (isLoading) return <div className="p-6">Loading...</div>;
   if (error)
@@ -52,7 +65,23 @@ export default function EpisodeDetailPage() {
           )}
 
           <div className="p-8">
-            <h1 className="text-4xl font-bold mb-4">{episode.name}</h1>
+            <div className="flex items-start justify-between gap-4 mb-4">
+              <h1 className="text-4xl font-bold">{episode.name}</h1>
+              <FavoriteButton
+                episode={{
+                  id: episode.id,
+                  name: episode.name,
+                  season: episode.season,
+                  number: episode.number,
+                  summary: episode.summary,
+                  airdate: episode.airdate,
+                  runtime: episode.runtime,
+                  image: episode.image,
+                  url: episode.url,
+                }}
+                initialIsFavorited={isFavorited}
+              />
+            </div>
 
             <div className="mb-6 text-gray-600">
               <p className="mb-2">
@@ -61,12 +90,12 @@ export default function EpisodeDetailPage() {
                 </span>
               </p>
               <p className="mb-2">
-                <span className="font-semibold">Air Date:</span>
+                <span className="font-semibold">Air Date:</span>{" "}
                 {episode.airdate}
               </p>
               {episode.runtime && (
                 <p>
-                  <span className="font-semibold">Runtime:</span>
+                  <span className="font-semibold">Runtime:</span>{" "}
                   {episode.runtime} minutes
                 </p>
               )}
