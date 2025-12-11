@@ -15,15 +15,18 @@ export default function Home() {
   const query = searchParams.get("query") || "";
   const currentPage = Number(searchParams.get("page")) || 1;
 
-  const filteredEpisodes =
-    show?.episodes?.filter((episode) => {
-      const query_lower = query.toLowerCase();
-      return (
-        episode.name.toLowerCase().includes(query_lower) ||
-        episode.summary?.toLowerCase().includes(query_lower) ||
-        episode.airdate.includes(query)
-      );
-    }) || [];
+  if (!show) return <div className="p-6">Show not found</div>;
+
+  const filteredEpisodes = (show.episodes || []).filter((episode) => {
+    const query_lower = query.toLowerCase();
+    return (
+      episode.name.toLowerCase().includes(query_lower) ||
+      episode.summary?.toLowerCase().includes(query_lower) ||
+      String(episode.season).includes(query) ||
+      String(episode.number).includes(query) ||
+      episode.airdate.includes(query)
+    );
+  });
 
   const totalPages = Math.ceil(filteredEpisodes.length / EPISODES_PER_PAGE);
   const paginatedEpisodes = filteredEpisodes.slice(
