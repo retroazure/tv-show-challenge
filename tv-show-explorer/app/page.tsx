@@ -15,9 +15,7 @@ export default function Home() {
   const query = searchParams.get("query") || "";
   const currentPage = Number(searchParams.get("page")) || 1;
 
-  if (!show) return <div className="p-6">Show not found</div>;
-
-  const filteredEpisodes = (show.episodes || []).filter((episode) => {
+  const filteredEpisodes = (show?.episodes || []).filter((episode) => {
     const query_lower = query.toLowerCase();
     return (
       episode.name.toLowerCase().includes(query_lower) ||
