@@ -9,18 +9,19 @@ export default function Pagination({ totalPages }: { totalPages: number }) {
   const currentPage = Number(searchParams.get("page")) || 1;
 
   const createPageURL = (pageNumber: number | string) => {
+    const safePage = Math.min(Math.max(Number(pageNumber), 1), totalPages);
     const params = new URLSearchParams(searchParams);
-    params.set("page", pageNumber.toString());
+    params.set("page", safePage.toString());
     return `${pathname}?${params.toString()}`;
   };
 
-  // ✅ Sliding window of 5 pages
-  const windowSize = 5;
-  const windowStart =
-    Math.floor((currentPage - 1) / windowSize) * windowSize + 1;
-  const windowEnd = Math.min(windowStart + windowSize - 1, totalPages);
+  const allPages = Array.from({ length: totalPages }, (_, i) => i + 1);
 
-  const visiblePages = Array.from(
+  const windowSize = 5;
+  const windowStart = currentPage;
+  const windowEnd = Math.min(currentPage + windowSize - 1, totalPages);
+
+  const mobilePages = Array.from(
     { length: windowEnd - windowStart + 1 },
     (_, i) => windowStart + i
   );
@@ -31,7 +32,8 @@ export default function Pagination({ totalPages }: { totalPages: number }) {
       aria-label="Pagination"
     >
       <Link
-        href={createPageURL(currentPage - 1)}
+        href={currentPage <= 1 ? "#" : createPageURL(currentPage - 1)}
+        onClick={(e) => currentPage <= 1 && e.preventDefault()}
         className={`px-3 py-2 rounded-lg flex items-center gap-2 ${
           currentPage <= 1
             ? "opacity-50 cursor-not-allowed bg-gray-100"
@@ -43,10 +45,26 @@ export default function Pagination({ totalPages }: { totalPages: number }) {
         <span className="hidden sm:inline">Previous</span>
       </Link>
 
-      <div className="flex gap-1 sm:gap-2 justify-center">
-        {visiblePages.map((page) => (
+      <div className="flex gap-1 sm:hidden">
+        {mobilePages.map((page) => (
           <Link
-            key={page}
+            key={`m-${page}`}
+            href={createPageURL(page)}
+            className={`px-3 py-2 rounded-lg ${
+              currentPage === page
+                ? "bg-blue-600 text-white"
+                : "border border-gray-300 hover:bg-gray-100"
+            }`}
+          >
+            {page}
+          </Link>
+        ))}
+      </div>
+
+      <div className="hidden sm:flex gap-2">
+        {allPages.map((page) => (
+          <Link
+            key={`d-${page}`}
             href={createPageURL(page)}
             className={`px-3 py-2 rounded-lg ${
               currentPage === page
@@ -61,7 +79,8 @@ export default function Pagination({ totalPages }: { totalPages: number }) {
       </div>
 
       <Link
-        href={createPageURL(currentPage + 1)}
+        href={currentPage >= totalPages ? "#" : createPageURL(currentPage + 1)}
+        onClick={(e) => currentPage >= totalPages && e.preventDefault()}
         className={`px-3 py-2 rounded-lg flex items-center gap-2 ${
           currentPage >= totalPages
             ? "opacity-50 cursor-not-allowed bg-gray-100"
