@@ -97,7 +97,7 @@ export default function Home() {
                       </p>
                       {episode.summary && (
                         <p className="text-gray-600 text-sm line-clamp-2">
-                          {episode.summary.replace(/<[^>]*>/g, "")}
+                          {episode.summary.replaceAll(/<[^>]*>/g, "")}
                         </p>
                       )}
                     </div>
