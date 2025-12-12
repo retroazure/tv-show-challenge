@@ -13,7 +13,7 @@ interface FavoriteButtonProps {
 export default function FavoriteButton({
   episode,
   initialIsFavorited,
-}: FavoriteButtonProps) {
+}: Readonly<FavoriteButtonProps>) {
   const [isFavorited, setIsFavorited] = useState(initialIsFavorited);
 
   useEffect(() => {

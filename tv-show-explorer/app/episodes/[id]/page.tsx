@@ -11,7 +11,7 @@ interface EpisodeDetailPageProps {
 
 export default async function EpisodeDetailPage({
   params,
-}: EpisodeDetailPageProps) {
+}: Readonly<EpisodeDetailPageProps>) {
   const { id } = await params;
   const episodeId = Number(id);
 
@@ -63,7 +63,7 @@ export default async function EpisodeDetailPage({
                 <span className="font-semibold">Air Date:</span>{" "}
                 {episode.airdate}
               </p>
-              {episode.runtime && (
+              {!!episode.runtime && (
                 <p>
                   <span className="font-semibold">Runtime:</span>{" "}
                   {episode.runtime} minutes
@@ -74,7 +74,7 @@ export default async function EpisodeDetailPage({
             {episode.summary && (
               <div className="text-lg text-gray-700">
                 <h2 className="text-2xl font-bold mb-4">Summary</h2>
-                <p>{episode.summary.replace(/<[^>]*>/g, "")}</p>
+                <p>{episode.summary.replaceAll(/<[^>]*>/g, "")}</p>
               </div>
             )}
           </div>
