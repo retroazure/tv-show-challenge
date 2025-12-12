@@ -52,7 +52,7 @@ export default function Home() {
           <h1 className="text-4xl font-bold mb-4">{show.title}</h1>
           {show.description && (
             <div className="text-lg text-gray-700 max-w-2xl">
-              {show.description.replace(/<[^>]*>/g, "")}
+              {show.description.replaceAll(/<[^>]*>/g, "")}
             </div>
           )}
         </div>
