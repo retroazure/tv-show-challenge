@@ -39,6 +39,41 @@
 - Type Interfaces (IEpisode, IShowDetails)
 - Strict Mode Enabled
 
+### 🧪 Testing
+- **Vitest**: Fast unit test framework
+- **React Testing Library**: Component testing
+- **@testing-library/user-event**: User interaction simulation
+- **jsdom**: DOM environment for tests
+
+#### Test Coverage
+- **Unit Tests**: Individual component behavior
+- **Integration Tests**: Component interactions
+- **Mocking**: Next.js navigation, API calls, server actions
+
+#### What's Tested
+- ✅ Component rendering (Search, Pagination, FavoriteButton)
+- ✅ User interactions (clicks, typing, navigation)
+- ✅ State management (loading, error, success states)
+- ✅ Data display (show info, episodes, metadata)
+- ✅ URL parameter handling (search queries, pagination)
+- ✅ Accessibility (aria-labels, semantic HTML)
+- ✅ Server actions (favorites functionality)
+
+#### Running Tests
+```bash
+# Run tests in watch mode
+npm test
+
+# Run tests with UI
+npm run test:ui
+
+# Generate coverage report
+npm run test:coverage
+
+# Run tests once (CI mode)
+npm test -- --run
+```
+
 ### 📦 Dependencies
 ```json
 {
@@ -49,6 +84,14 @@
     "@tanstack/react-query": "^5.0.0",
     "lucide-react": "*",
     "typescript": "^5.0.0"
+  },
+  "devDependencies": {
+    "vitest": "^2.0.0",
+    "@vitest/ui": "^2.0.0",
+    "@testing-library/react": "^16.0.0",
+    "@testing-library/user-event": "^14.0.0",
+    "jsdom": "^25.0.0",
+    "@vitejs/plugin-react": "^4.0.0"
   }
 }
 ```
@@ -71,6 +114,13 @@
 - Examples: POST requests, database mutations
 - Used for FavoriteButton functionality. Handling the state of the favorite button and preserving the object in a database (json file)
 
+### Testing Strategy
+- **Vitest over Jest**: Faster execution, better ESM support, simpler configuration
+- **No jest-dom**: Using Vitest's built-in matchers to keep dependencies minimal
+- **Component-level tests**: Focus on user-facing behavior rather than implementation details
+- **Mock external dependencies**: Next.js router, API calls, and server actions
+- **Type-safe mocks**: Using TypeScript for mock data with proper interfaces
+
 ### Next.js Ecosystem Integration
 - **Next.js Image Component**: Optimized image loading, lazy loading, responsive sizes
 - **Next.js Link Component**: Client-side navigation, prefetching, performance
@@ -92,4 +142,3 @@ Data is fetched client-side using Tanstack Query. When the home page loads, it f
 ### Why Not Static Generation?
 
 Static generation pre-builds pages ahead of time. But data changes constantly - new episodes air regularly, show information updates. The site would need constant rebuilds, which doesn't make sense for a public API that's not controlled.
-
